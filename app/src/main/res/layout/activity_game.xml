@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10.0dip"
+        android:orientation="vertical" >
+        <com.imagine.wuzzle.GameNote
+            android:id="@+id/gamenote"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:layout_margin="0.0dip"
+            android:layout_weight="1.0" >
+            <com.imagine.wuzzle.GamePad
+                android:id="@+id/gamepad"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical" />
+        </RelativeLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/thint"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/bg"
+        android:padding="26dp"
+        android:text="No hint Available. Tap to close"
+        android:textSize="16sp"
+        android:visibility="gone" />
+</FrameLayout>
