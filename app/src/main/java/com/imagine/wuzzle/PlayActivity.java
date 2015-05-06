@@ -27,43 +27,27 @@ public class PlayActivity extends ActionBarActivity {
 		public String word;
 		public String hint;
 	}
-
+	public class Level {
+		public int no;
+		public int wc;
+	}
 	private int square = 3;
-	private ArrayList<Word> words = new ArrayList<Word>();;
+	private ArrayList<Word> words = new ArrayList<Word>();
+	private ArrayList<Level> levels = new ArrayList<Level>();
 	GamePad gp;
 	GameNote gn;
 	LinearLayout l;
 	TextView tv;
-	private int level =1;
+	private Level level = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		final String label = getIntent().getStringExtra("TYPE");
 		getSupportActionBar().setTitle(label);
 		String d = this.getString(R.string.data);
-		try {
-			JSONObject o = new JSONObject(d);
-			JSONArray rr = o.getJSONArray("branches");
-
-			for (int x = 0; x < rr.length(); x++) {
-				JSONObject p = rr.getJSONObject(x);
-				JSONArray r = p.getJSONArray("words");
-				if (p.getString("name").contentEquals(label)) {
-					for (int x1 = 0; x1 < r.length(); x1++) {
-						JSONObject ww = r.getJSONObject(x1);
-						Word w = new Word();
-						w.word = ww.getString("word");
-						w.hint = ww.getString("hint");
-						words.add(w);
-					}
-					break;
-				}
-			}
-		} catch (Exception e) {
-			Toast.makeText(this, "Invalid Data source", Toast.LENGTH_LONG)
-					.show();
-		}
-
+		level = new Level();
+		level.wc = 3;
+		loadWords(d,label);
 		setContentView(R.layout.activity_game);
 		l = (LinearLayout) findViewById(R.id.container);
 		tv = (TextView) findViewById(R.id.thint);
@@ -120,7 +104,39 @@ public class PlayActivity extends ActionBarActivity {
 		Word nextword = words.get(0);
 		startGame(nextword);
 	}
+	void loadWords(String d,String label){
+		words.clear();
+		try {
+			JSONObject o = new JSONObject(d);
+			JSONArray rr = o.getJSONArray("branches");
 
+			for (int x = 0; x < rr.length(); x++) {
+				JSONObject p = rr.getJSONObject(x);
+				JSONArray r = p.getJSONArray("words");
+				if (p.getString("name").contentEquals(label)) {
+					for (int x1 = 0; x1 < r.length(); x1++) {
+						JSONObject ww = r.getJSONObject(x1);
+						Word w = new Word();
+						w.word = ww.getString("word");
+						if (w.word.length() != level.wc){
+							continue;
+						}
+						w.hint = ww.getString("hint");
+						words.add(w);
+					}
+					break;
+				}
+			}
+			if (words.size()<1){
+				level.wc++;
+				loadWords(s,label);
+			}
+		} catch (Exception e) {
+			Toast.makeText(this, "Invalid Data source", Toast.LENGTH_LONG)
+					.show();
+		}
+
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
